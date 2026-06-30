@@ -5,15 +5,15 @@ import { Mail, Send, Phone, MapPin, Camera, MessageCircle, MessageSquare } from 
 import Logo from "./logo";
 
 const quickLinks = [
-  { label: "Home", href: "#" },
-  { label: "About Us", href: "#about" },
-  { label: "Menu", href: "#menu" },
-  { label: "Careers", href: "#" },
-  { label: "Locations", href: "#" },
+  { label: "Home", href: "/" },
+  { label: "Menu", href: "/menu" },
+  { label: "About Us", href: "/about" },
+  { label: "Locations", href: "/locations" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const customerCare = [
-  { label: "Contact Us", href: "#" },
+  { label: "Contact Us", href: "/contact" },
   { label: "FAQ", href: "#" },
   { label: "Shipping Policy", href: "#" },
   { label: "Returns", href: "#" },

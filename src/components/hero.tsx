@@ -118,14 +118,14 @@ export default function Hero() {
             variants={itemVariants}
           >
             <a
-              href="#menu"
+              href="/menu"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-bg-primary font-medium rounded-full hover:bg-accent-light transition-all duration-200 text-base active:scale-[0.97]"
             >
               Explore Menu
               <span aria-hidden="true">&rarr;</span>
             </a>
             <a
-              href="#about"
+              href="/about"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-accent/40 text-heading font-medium rounded-full hover:bg-accent/10 hover:border-accent/60 transition-all duration-200 text-base active:scale-[0.97]"
             >
               Our Story
