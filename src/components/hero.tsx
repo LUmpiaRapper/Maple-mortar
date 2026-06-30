@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { Coffee, Medal, Leaf } from "lucide-react";
 import Logo from "./logo";
@@ -117,14 +118,14 @@ export default function Hero() {
             className="flex flex-col sm:flex-row gap-4 mb-12"
             variants={itemVariants}
           >
-            <a
+            <Link
               href="/menu"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-bg-primary font-medium rounded-full hover:bg-accent-light transition-all duration-200 text-base active:scale-[0.97]"
             >
               Explore Menu
               <span aria-hidden="true">&rarr;</span>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/about"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-accent/40 text-heading font-medium rounded-full hover:bg-accent/10 hover:border-accent/60 transition-all duration-200 text-base active:scale-[0.97]"
             >
@@ -132,7 +133,7 @@ export default function Hero() {
               <span aria-hidden="true" className="text-accent">
                 &#9654;
               </span>
-            </a>
+            </Link>
           </motion.div>
 
           <motion.div className="flex flex-wrap gap-6 md:gap-8" variants={itemVariants}>

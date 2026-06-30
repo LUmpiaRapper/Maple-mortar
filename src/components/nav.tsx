@@ -25,12 +25,12 @@ export default function Nav() {
   const navBg = useTransform(
     scrollY,
     [0, 80],
-    ["rgba(5, 3, 2, 0.5)", "rgba(5, 3, 2, 0.95)"]
+    ["rgba(5, 3, 2, 0.3)", "rgba(5, 3, 2, 0.85)"]
   );
   const navBorder = useTransform(
     scrollY,
     [0, 80],
-    ["rgba(44, 34, 27, 0)", "rgba(44, 34, 27, 0.4)"]
+    ["rgba(44, 34, 27, 0)", "rgba(44, 34, 27, 0.3)"]
   );
   const navHeight = useTransform(scrollY, [0, 80], ["72px", "60px"]);
 
@@ -42,8 +42,8 @@ export default function Nav() {
         borderBottomColor: navBorder,
         height: navHeight,
       } : {
-        backgroundColor: "rgba(5, 3, 2, 0.95)",
-        borderBottomColor: "rgba(44, 34, 27, 0.4)",
+        backgroundColor: "rgba(5, 3, 2, 0.85)",
+        borderBottomColor: "rgba(44, 34, 27, 0.3)",
       }}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-full">
