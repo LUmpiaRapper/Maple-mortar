@@ -129,7 +129,7 @@ export default function MenuPage() {
                 {category.description}
               </p>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4 md:gap-5">
                 {category.items.map((item, itemIdx) => (
                   <motion.div
                     key={item.id}
@@ -138,9 +138,9 @@ export default function MenuPage() {
                     whileInView={shouldAnimate ? "visible" : undefined}
                     viewport={{ once: true, margin: "-40px" }}
                     variants={cardVariants}
-                    className="bg-bg-card rounded-card border border-border/50 p-4 flex gap-4 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300"
+                    className="bg-bg-card rounded-card border border-border/50 p-3 md:p-4 flex gap-3 md:gap-4 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300"
                   >
-                    <div className="w-20 h-20 rounded-sm overflow-hidden flex-shrink-0 bg-bg-secondary">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-sm overflow-hidden flex-shrink-0 bg-bg-secondary">
                       <Image
                         src={item.image}
                         alt={item.name}
@@ -161,7 +161,7 @@ export default function MenuPage() {
                       <p className="text-body-muted text-xs mt-1 leading-relaxed line-clamp-2">
                         {item.description}
                       </p>
-                      <div className="flex items-center gap-2 mt-2">
+                      <div className="flex items-center gap-2 mt-2 min-h-[20px]">
                         {item.badges?.map((badge) => (
                           <span
                             key={badge}

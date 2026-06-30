@@ -1,14 +1,15 @@
 # Maple & Mortar — Roadmap
 
-## Phase 1: Core Pages (static)
-Build out the remaining static pages to turn the landing page into a full site.
+## Phase 1: Core Pages (static) ✅ Complete
+Full static site with all core pages, navigation, SEO, and immersive animations.
 
-- **Menu page** (`/menu`) — full categorized menu with dietary badges, prices, descriptions, and hero image per category. Reuses the card component pattern from Popular Picks.
-- **About page** (`/about`) — expanded brand story, founder bio (Eleanor "Nell" Hargrove), timeline, interior photo gallery.
-- **Contact page** (`/contact`) — embedded map, contact form (Netlify-form or server action), hours, social links.
-- **Locations page** (`/locations`) — single or multiple locations with address, hours, local SEO schema.
+- **Home** (`/`) — immersive hero with parallax, steam wisps, trust badges, logo
+- **Menu** (`/menu`) — full categorized menu with 24 items, dietary badges, prices, descriptions, hero per category, stagger card reveals
+- **About** (`/about`) — expanded brand story, founder bio (Eleanor "Nell" Hargrove), 7-milestone timeline, 4 values cards
+- **Contact** (`/contact`) — server action form, embedded map placeholder, hours, contact info
+- **Locations** (`/locations`) — address, hours table, holiday hours, feature icons, coming soon card
 
-**No backend needed.** All content lives in local data files (`src/lib/`).
+**Delivered:** Sticky translucent nav with active-link indicator + mobile menu, route transition overlay, SEO (JSON-LD, sitemap, robots.txt), 24 Pexels menu item images with attribution, framer-motion animations across all pages. All content in `src/lib/`.
 
 ## Phase 2: Dynamic Content (CMS)
 Replace static data with a headless CMS so staff can update content without code.
@@ -58,10 +59,11 @@ Internal tools for staff.
 - **Email**: Resend (transactional) + Loops (marketing/newsletter).
 - **Monitoring**: Sentry for error tracking + PostHog for product analytics.
 
-## Quick Wins (do first)
+## Quick Wins
 
-1. [ ] Menu page — already have menu data, just need page routing and layout
-2. [ ] `/about` page — expand existing About section content
-3. [ ] Contact form — simple server action with Resend
-4. [ ] Add structured data (JSON-LD) for local business SEO
-5. [ ] Sitemap + robots.txt
+1. [x] Menu page — 24 items, 5 categories, dietary badges
+2. [x] `/about` page — story, timeline, values cards
+3. [x] Contact form — server action (logs to console, swap to Resend later)
+4. [x] Structured data (JSON-LD) for local business SEO
+5. [x] Sitemap + robots.txt
+6. [x] Pexels menu item images (24 unique photos with attribution)
