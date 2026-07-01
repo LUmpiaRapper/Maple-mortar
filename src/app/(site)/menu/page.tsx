@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useMemo } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { Coffee } from "lucide-react";
-import { fullMenu } from "@/lib/menu-data";
+import { fullMenu as staticMenu } from "@/lib/menu-data";
+import type { MenuCategory } from "@/lib/menu-data";
 
 const badgeStyles: Record<string, string> = {
   V: "bg-green-900/30 text-green-400 border-green-700/40",
@@ -34,10 +35,31 @@ const cardVariants = {
   }),
 };
 
+function flattenItems(categories: MenuCategory[]) {
+  return categories.flatMap((cat) =>
+    cat.items.map((item) => ({ ...item, categoryName: cat.name, categoryId: cat.id }))
+  );
+}
+
 export default function MenuPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const shouldAnimate = prefersReducedMotion !== true;
+
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+
+  const categories = useMemo(() => staticMenu, []);
+  const allItems = useMemo(() => flattenItems(staticMenu), []);
+
+  const filteredItems = useMemo(() => {
+    if (activeCategory === "all") return allItems;
+    return allItems.filter((item) => item.categoryId === activeCategory);
+  }, [activeCategory, allItems]);
+
+  const filteredCategories = useMemo(() => {
+    if (activeCategory === "all") return categories;
+    return categories.filter((cat) => cat.id === activeCategory);
+  }, [activeCategory, categories]);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -107,78 +129,127 @@ export default function MenuPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          {fullMenu.map((category) => (
-            <motion.div
-              key={category.id}
-              id={category.id}
-              className="mb-16 last:mb-0 scroll-mt-24"
-              initial={shouldAnimate ? "hidden" : undefined}
-              whileInView={shouldAnimate ? "visible" : undefined}
-              viewport={{ once: true, margin: "-60px" }}
-              variants={sectionVariants}
+      <section className="sticky top-[72px] z-30 bg-bg-primary/80 backdrop-blur-lg border-b border-border/40">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
+          <button
+            onClick={() => setActiveCategory("all")}
+            className={`shrink-0 px-4 py-1.5 text-xs font-medium rounded-full border transition-all duration-200 ${
+              activeCategory === "all"
+                ? "bg-accent text-bg-primary border-accent"
+                : "text-body-muted border-border hover:text-accent hover:border-accent/40"
+            }`}
+          >
+            All Items
+          </button>
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`shrink-0 px-4 py-1.5 text-xs font-medium rounded-full border transition-all duration-200 ${
+                activeCategory === cat.id
+                  ? "bg-accent text-bg-primary border-accent"
+                  : "text-body-muted border-border hover:text-accent hover:border-accent/40"
+              }`}
             >
-              <div className="flex items-center gap-3 mb-2">
-                <Coffee className="w-5 h-5 text-accent" />
-                <h2 className="font-serif text-2xl md:text-3xl text-heading">
-                  {category.name}
-                </h2>
-              </div>
-              <p className="text-body-muted text-sm mb-8 ml-8">
-                {category.description}
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                {category.items.map((item, itemIdx) => (
-                  <motion.div
-                    key={item.id}
-                    custom={itemIdx}
-                    initial={shouldAnimate ? "hidden" : undefined}
-                    whileInView={shouldAnimate ? "visible" : undefined}
-                    viewport={{ once: true, margin: "-40px" }}
-                    variants={cardVariants}
-                    className="bg-bg-card rounded-card border border-border/50 p-3 md:p-4 flex gap-3 md:gap-4 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300"
-                  >
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-sm overflow-hidden flex-shrink-0 bg-bg-secondary">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={80}
-                        height={80}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-serif text-sm text-heading truncate">
-                          {item.name}
-                        </h3>
-                        <span className="text-accent font-semibold text-sm flex-shrink-0">
-                          {item.price}
-                        </span>
-                      </div>
-                      <p className="text-body-muted text-xs mt-1 leading-relaxed line-clamp-2">
-                        {item.description}
-                      </p>
-                      <div className="flex items-center gap-2 mt-2 min-h-[20px]">
-                        {item.badges?.map((badge) => (
-                          <span
-                            key={badge}
-                            className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${badgeStyles[badge] || "bg-bg-secondary text-body-muted border-border"}`}
-                          >
-                            {badge}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+              {cat.name}
+            </button>
           ))}
         </div>
       </section>
+
+      <section className="py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          {activeCategory === "all" ? (
+            filteredCategories.map((category) => (
+              <motion.div
+                key={category.id}
+                id={category.id}
+                className="mb-16 last:mb-0 scroll-mt-24"
+                initial={shouldAnimate ? "hidden" : undefined}
+                whileInView={shouldAnimate ? "visible" : undefined}
+                viewport={{ once: true, margin: "-60px" }}
+                variants={sectionVariants}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <Coffee className="w-5 h-5 text-accent" />
+                  <h2 className="font-serif text-2xl md:text-3xl text-heading">
+                    {category.name}
+                  </h2>
+                </div>
+                <p className="text-body-muted text-sm mb-8 ml-8">
+                  {category.description}
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                  {category.items.map((item, itemIdx) => (
+                    <ItemCard key={item.id} item={item} index={itemIdx} shouldAnimate={shouldAnimate} />
+                  ))}
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+              {filteredItems.map((item, itemIdx) => (
+                <ItemCard key={item.id} item={item} index={itemIdx} shouldAnimate={shouldAnimate} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
     </>
+  );
+}
+
+function ItemCard({
+  item,
+  index,
+  shouldAnimate,
+}: {
+  item: { id: number; name: string; description: string; price: string; image: string; badges?: string[] };
+  index: number;
+  shouldAnimate: boolean;
+}) {
+  return (
+    <motion.div
+      custom={index}
+      initial={shouldAnimate ? "hidden" : undefined}
+      whileInView={shouldAnimate ? "visible" : undefined}
+      viewport={{ once: true, margin: "-40px" }}
+      variants={cardVariants}
+      className="bg-bg-card rounded-card border border-border/50 p-3 md:p-4 flex gap-3 md:gap-4 hover:border-accent/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300"
+    >
+      <div className="w-16 h-16 md:w-20 md:h-20 rounded-sm overflow-hidden flex-shrink-0 bg-bg-secondary">
+        <Image
+          src={item.image}
+          alt={item.name}
+          width={80}
+          height={80}
+          className="object-cover w-full h-full"
+        />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="font-serif text-sm text-heading truncate">
+            {item.name}
+          </h3>
+          <span className="text-accent font-semibold text-sm flex-shrink-0">
+            {item.price}
+          </span>
+        </div>
+        <p className="text-body-muted text-xs mt-1 leading-relaxed line-clamp-2">
+          {item.description}
+        </p>
+        <div className="flex items-center gap-2 mt-2 min-h-[20px]">
+          {item.badges?.map((badge) => (
+            <span
+              key={badge}
+              className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${badgeStyles[badge] || "bg-bg-secondary text-body-muted border-border"}`}
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 }

@@ -48,7 +48,7 @@ npm start
 
 ## Status
 
-🚧 Work in progress — hobby project, built for fun and practice.
+✅ Complete — static demo webapp, ready for portfolio showcase.
 
 ## Disclaimer
 

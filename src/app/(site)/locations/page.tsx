@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { MapPin, Clock, Coffee, Wifi, Car, Music } from "lucide-react";
+import MapIllustration from "@/components/map-illustration";
 
 const features = [
   { icon: Wifi, label: "Free Wi-Fi" },
@@ -115,22 +116,11 @@ export default function LocationsPage() {
               variants={fadeUp}
             >
               <motion.div
-                className="aspect-[16/9] rounded-card overflow-hidden bg-bg-card border border-border/50 flex items-center justify-center mb-6"
+                className="aspect-[16/9] rounded-card overflow-hidden bg-bg-card border border-border/50 mb-6"
                 whileHover={shouldAnimate ? { borderColor: "rgba(203, 143, 63, 0.3)" } : undefined}
                 transition={{ duration: 0.3 }}
               >
-                <div className="text-center px-6">
-                  <motion.div
-                    animate={shouldAnimate ? { scale: [1, 1.05, 1] } : undefined}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <MapPin className="w-10 h-10 text-accent/40 mx-auto mb-3" />
-                  </motion.div>
-                  <p className="text-body-muted text-sm leading-relaxed">
-                    Map embed placeholder — add your Google Maps or Mapbox embed URL
-                    for 42 Maple Street, Birchwood Hollow, NH 03456.
-                  </p>
-                </div>
+                <MapIllustration className="h-full" />
               </motion.div>
 
               <h2 className="font-serif text-2xl text-heading mb-4">

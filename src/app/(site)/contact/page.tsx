@@ -1,8 +1,10 @@
 "use client";
 
+import { useActionState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
-import { submitContact } from "./actions";
+import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import { submitContact, type FormState } from "./actions";
+import MapIllustration from "@/components/map-illustration";
 
 const hours = [
   { day: "Monday — Friday", hours: "6:30 AM — 7:00 PM" },
@@ -24,12 +26,27 @@ const infoItemVariants = {
   }),
 };
 
+const initialState: FormState = { success: false, message: "" };
+
 function ContactForm({ shouldAnimate }: { shouldAnimate: boolean }) {
+  const [state, formAction, pending] = useActionState(submitContact, initialState);
+
+  if (state.success && state.message) {
+    return (
+      <motion.div
+        className="flex flex-col items-center justify-center py-12 text-center"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        <CheckCircle className="w-12 h-12 text-accent mb-4" />
+        <p className="text-heading font-serif text-lg">{state.message}</p>
+      </motion.div>
+    );
+  }
+
   return (
-    <form
-      className="space-y-5"
-      action={submitContact}
-    >
+    <form className="space-y-5" action={formAction}>
       <div>
         <label htmlFor="name" className="block text-sm text-heading mb-1.5">
           Name
@@ -71,11 +88,12 @@ function ContactForm({ shouldAnimate }: { shouldAnimate: boolean }) {
       </div>
       <motion.button
         type="submit"
-        className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-accent text-bg-primary font-medium rounded-full hover:bg-accent-light transition-all duration-200 text-sm active:scale-[0.97]"
-        whileHover={shouldAnimate ? { scale: 1.02 } : undefined}
-        whileTap={shouldAnimate ? { scale: 0.97 } : undefined}
+        disabled={pending}
+        className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-accent text-bg-primary font-medium rounded-full hover:bg-accent-light transition-all duration-200 text-sm active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
+        whileHover={shouldAnimate && !pending ? { scale: 1.02 } : undefined}
+        whileTap={shouldAnimate && !pending ? { scale: 0.97 } : undefined}
       >
-        Send Message
+        {pending ? "Sending..." : "Send Message"}
         <Send className="w-4 h-4" />
       </motion.button>
     </form>
@@ -204,16 +222,11 @@ export default function ContactPage() {
                   Find Us
                 </h3>
                 <motion.div
-                  className="aspect-[4/3] rounded-card overflow-hidden bg-bg-card border border-border/50 flex items-center justify-center"
+                  className="aspect-[4/3] rounded-card overflow-hidden bg-bg-card border border-border/50"
                   whileHover={shouldAnimate ? { borderColor: "rgba(203, 143, 63, 0.3)" } : undefined}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="text-center px-6">
-                    <MapPin className="w-8 h-8 text-accent/40 mx-auto mb-2" />
-                    <p className="text-body-muted text-xs leading-relaxed">
-                      Map embed placeholder — add your Google Maps or Mapbox embed URL.
-                    </p>
-                  </div>
+                  <MapIllustration className="h-full" />
                 </motion.div>
               </motion.div>
             </motion.div>
